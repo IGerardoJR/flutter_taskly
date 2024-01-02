@@ -20,10 +20,13 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.red,
-          toolbarHeight: _deviceHeigth * 0.08,
-          title: const Text(
-            'Taskly',
-            style: TextStyle(fontSize: 25, color: Colors.white),
+          toolbarHeight: _deviceHeigth * 0.11,
+          title: Container(
+            alignment: Alignment.center,
+            child: const Text(
+              'Taskly',
+              style: TextStyle(fontSize: 25, color: Colors.white),
+            ),
           )),
     );
   }
