@@ -18,19 +18,22 @@ class _HomePageState extends State<HomePage> {
     _deviceHeigth = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
     return Scaffold(
-        appBar: AppBar(
-            backgroundColor: Colors.red,
-            toolbarHeight: _deviceHeigth * 0.11,
-            title: Container(
-              alignment: Alignment.center,
-              child: const Text(
-                'Taskly',
-                style: TextStyle(fontSize: 25, color: Colors.white),
-              ),
-            )),
-        body: _taskList());
+      appBar: AppBar(
+          backgroundColor: Colors.red,
+          toolbarHeight: _deviceHeigth * 0.11,
+          title: Container(
+            alignment: Alignment.center,
+            child: const Text(
+              'Taskly',
+              style: TextStyle(fontSize: 25, color: Colors.white),
+            ),
+          )),
+      body: _taskList(),
+      floatingActionButton: _addTaskButton(),
+    );
   }
 
+  // Tasks widget
   Widget _taskList() {
     return ListView(
       children: [
@@ -45,6 +48,17 @@ class _HomePageState extends State<HomePage> {
             subtitle: Text(DateTime.now().toString()),
             trailing: Icon(Icons.check_box_outlined, color: Colors.red)),
       ],
+    );
+  }
+
+  Widget _addTaskButton() {
+    return FloatingActionButton(
+      onPressed: () {
+        print("Pressed button!");
+      },
+      backgroundColor: Colors.red,
+      child: const Icon(Icons.add),
+      foregroundColor: Colors.white,
     );
   }
 }
