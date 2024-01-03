@@ -10,6 +10,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late double _deviceWidth, _deviceHeigth;
+  String? _newTaskContent;
 
   _HomePageState();
 
@@ -17,6 +18,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     _deviceHeigth = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
+    print("Input value $_newTaskContent");
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.red,
@@ -53,12 +55,31 @@ class _HomePageState extends State<HomePage> {
 
   Widget _addTaskButton() {
     return FloatingActionButton(
-      onPressed: () {
-        print("Pressed button!");
-      },
+      onPressed: _displayTaskButtonPopup,
       backgroundColor: Colors.red,
       child: const Icon(Icons.add),
       foregroundColor: Colors.white,
     );
+  }
+
+  void _displayTaskButtonPopup() {
+    showDialog(
+        context: context,
+        builder: (BuildContext _context) {
+          return AlertDialog(
+            title: const Text('Add new Task!'),
+            content: TextField(
+              onSubmitted: (_value) {
+                print(_value);
+              },
+              onChanged: (_value) {
+                print(_value);
+                setState(() {
+                  _newTaskContent = _value;
+                });
+              },
+            ),
+          );
+        });
   }
 }
