@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'package:hive_flutter/hive_flutter.dart';
+
 class HomePage extends StatefulWidget {
   HomePage();
   @override
@@ -15,10 +17,15 @@ class _HomePageState extends State<HomePage> {
   _HomePageState();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     _deviceHeigth = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
-    print("Input value $_newTaskContent");
     return Scaffold(
       appBar: AppBar(
           backgroundColor: Colors.red,
@@ -30,7 +37,7 @@ class _HomePageState extends State<HomePage> {
               style: TextStyle(fontSize: 25, color: Colors.white),
             ),
           )),
-      body: _taskList(),
+      body: _taskView(),
       floatingActionButton: _addTaskButton(),
     );
   }
@@ -53,6 +60,24 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  Widget _taskView() {
+    return FutureBuilder(
+        future: Future.delayed(Duration(seconds: 2)),
+        builder: (BuildContext _context, AsyncSnapshot _snapShot) {
+          if (_snapShot.connectionState == ConnectionState.done) {
+            return _taskList();
+          } else {
+            return Container(
+                alignment: Alignment.center,
+                child: const CircularProgressIndicator(
+                  color: Colors.red,
+                  strokeWidth: 6.0,
+                  value: null,
+                ));
+          }
+        });
+  }
+
   Widget _addTaskButton() {
     return FloatingActionButton(
       onPressed: _displayTaskButtonPopup,
@@ -69,11 +94,8 @@ class _HomePageState extends State<HomePage> {
           return AlertDialog(
             title: const Text('Add new Task!'),
             content: TextField(
-              onSubmitted: (_value) {
-                print(_value);
-              },
+              onSubmitted: (_value) {},
               onChanged: (_value) {
-                print(_value);
                 setState(() {
                   _newTaskContent = _value;
                 });
