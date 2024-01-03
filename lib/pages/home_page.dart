@@ -16,8 +16,6 @@ class _HomePageState extends State<HomePage> {
   String? _newTaskContent;
   Box? _box;
 
-  Task _newTask =
-      Task(content: "Go to Gym!", timestamp: DateTime.now(), done: true);
   _HomePageState();
 
   @override
@@ -48,7 +46,8 @@ class _HomePageState extends State<HomePage> {
 
   Widget _taskView() {
     return FutureBuilder(
-        future: Future.delayed(Duration(seconds: 2)),
+        // future: Future.delayed(Duration(seconds: 2)),
+        future: Hive.openBox('tasks'),
         builder: (BuildContext _context, AsyncSnapshot _snapShot) {
           if (_snapShot.connectionState == ConnectionState.done) {
             _box = _snapShot.data;
@@ -67,23 +66,29 @@ class _HomePageState extends State<HomePage> {
 
   // Tasks widget
   Widget _taskList() {
+    Task _newTask =
+        Task(content: "Ir al super!", timestamp: DateTime.now(), done: true);
     _box?.add(_newTask.toMap());
     print('Task: ${_box!.values.toList()}');
 
+    // List tasks = List.empty(growable: true);
     List tasks = _box!.values.toList();
+
     return ListView.builder(
         itemCount: tasks.length,
         itemBuilder: (BuildContext _context, int index) {
+          var task = Task.fromMap(tasks[index]);
           return ListTile(
-              title: const Text("Do Laundry",
-                  style: TextStyle(decoration: TextDecoration.lineThrough)),
-              subtitle: Text(DateTime.now().toString()),
-              trailing: Icon(Icons.check_box_outlined, color: Colors.red));
-          ListTile(
-              title: Text("Go to Market",
-                  style: TextStyle(decoration: TextDecoration.lineThrough)),
-              subtitle: Text(DateTime.now().toString()),
-              trailing: Icon(Icons.check_box_outlined, color: Colors.red));
+              title: Text(task.content,
+                  style: TextStyle(
+                      decoration:
+                          task.done ? TextDecoration.lineThrough : null)),
+              subtitle: Text(task.timestamp.toString()),
+              trailing: Icon(
+                  task.done
+                      ? Icons.check_box_outlined
+                      : Icons.check_box_outline_blank_outlined,
+                  color: Colors.red));
         });
   }
 
