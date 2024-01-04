@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
         // future: Future.delayed(Duration(seconds: 2)),
         future: Hive.openBox('tasks'),
         builder: (BuildContext _context, AsyncSnapshot _snapShot) {
-          if (_snapShot.connectionState == ConnectionState.done) {
+          if (_snapShot.hasData) {
             _box = _snapShot.data;
             return _taskList();
           } else {
@@ -75,22 +75,32 @@ class _HomePageState extends State<HomePage> {
     List tasks = _box!.values.toList();
 
     return ListView.builder(
-        itemCount: tasks.length,
-        itemBuilder: (BuildContext _context, int index) {
-          var task = Task.fromMap(tasks[index]);
-          print(task);
-          return ListTile(
-              title: Text(task.content,
-                  style: TextStyle(
-                      decoration:
-                          task.done ? TextDecoration.lineThrough : null)),
-              subtitle: Text(task.timestamp.toString()),
-              trailing: Icon(
-                  task.done
-                      ? Icons.check_box_outlined
-                      : Icons.check_box_outline_blank_outlined,
-                  color: Colors.red));
-        });
+      itemCount: tasks.length,
+      itemBuilder: (BuildContext _context, int index) {
+        var task = Task.fromMap(tasks[index]);
+        print(task);
+        return ListTile(
+          title: Text(task.content,
+              style: TextStyle(
+                  decoration: task.done ? TextDecoration.lineThrough : null)),
+          subtitle: Text(task.timestamp.toString()),
+          trailing: Icon(
+              task.done
+                  ? Icons.check_box_outlined
+                  : Icons.check_box_outline_blank_outlined,
+              color: Colors.red),
+          onTap: () {
+            task.done = !task.done;
+            _box!.putAt(index, task.toMap());
+            setState(() {});
+          },
+          onLongPress: () {
+            _box!.deleteAt(index);
+            setState(() {});
+          },
+        );
+      },
+    );
   }
 
   Widget _addTaskButton() {
