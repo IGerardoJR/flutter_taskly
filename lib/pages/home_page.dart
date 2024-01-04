@@ -66,10 +66,10 @@ class _HomePageState extends State<HomePage> {
 
   // Tasks widget
   Widget _taskList() {
-    Task _newTask =
-        Task(content: "Ir al super!", timestamp: DateTime.now(), done: true);
-    _box?.add(_newTask.toMap());
-    print('Task: ${_box!.values.toList()}');
+    // Task _newTask =
+    //     Task(content: "Ir al super!", timestamp: DateTime.now(), done: true);
+    // _box?.add(_newTask.toMap());
+    // print('Task: ${_box!.values.toList()}');
 
     // List tasks = List.empty(growable: true);
     List tasks = _box!.values.toList();
@@ -78,6 +78,7 @@ class _HomePageState extends State<HomePage> {
         itemCount: tasks.length,
         itemBuilder: (BuildContext _context, int index) {
           var task = Task.fromMap(tasks[index]);
+          print(task);
           return ListTile(
               title: Text(task.content,
                   style: TextStyle(
@@ -108,7 +109,19 @@ class _HomePageState extends State<HomePage> {
           return AlertDialog(
             title: const Text('Add new Task!'),
             content: TextField(
-              onSubmitted: (_value) {},
+              onSubmitted: (_) {
+                if (_newTaskContent != null) {
+                  var _task = Task(
+                      content: _newTaskContent!,
+                      timestamp: DateTime.now(),
+                      done: false);
+                  _box!.add(_task.toMap());
+
+                  setState(() {
+                    _newTaskContent = _task.content;
+                  });
+                }
+              },
               onChanged: (_value) {
                 setState(() {
                   _newTaskContent = _value;
