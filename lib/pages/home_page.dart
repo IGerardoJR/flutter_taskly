@@ -119,6 +119,7 @@ class _HomePageState extends State<HomePage> {
 
                   setState(() {
                     _newTaskContent = _task.content;
+                    Navigator.pop(context);
                   });
                 }
               },
